@@ -1,0 +1,32 @@
+﻿@using Parser.Contract
+
+<h3>Statistics</h3>
+
+<div>
+    <b>Most popular tag:</b>
+    @stats.MostPopularTag
+</div>
+
+<div>
+    <b>All unique tags:</b>
+    @String.Join(" ", stats.UniqueTags)
+</div>
+
+<div>
+    <b>Longest path:</b>
+    @String.Join(" ", stats.LongestPath)
+</div>
+
+<div>
+    <b>Longest path with most popular tag:</b>
+    @String.Join(" ", stats.LongestPathWithMostPopularTag)
+</div>
+
+@code
+{
+    [Parameter]
+    public StatisticsDto stats { get; set; }
+
+    [Parameter]
+    public EventCallback<StatisticsDto> statsChanged { get; set; }
+}

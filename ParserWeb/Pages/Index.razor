@@ -1,0 +1,49 @@
+﻿@page "/"
+@using Parser.Contract
+@using Microsoft.Extensions.Configuration
+@inject HttpClient Http
+@inject IConfigurationRoot  Config
+
+<h1>Html parser</h1>
+
+<b>Enter url below to get statistics</b>
+
+<EditForm Model="@userInputModel" OnValidSubmit="@HandleValidation">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <InputText id="url" @bind-Value="userInputModel.Url" />
+    <button type="submit">Submit</button>
+</EditForm>
+
+@if (_loading)
+{
+    <div>...loading...</div>
+}
+else
+{
+    <ParserWeb.Components.Statistics @bind-stats="@stats" />
+}
+
+@code
+{
+    private bool _loading = false;
+    private UserInputModel userInputModel = new UserInputModel();
+    private StatisticsDto stats = new StatisticsDto()
+    {
+        MostPopularTag = string.Empty,
+        UniqueTags = Enumerable.Empty<string>(),
+        LongestPath = Enumerable.Empty<string>(),
+        LongestPathWithMostPopularTag = Enumerable.Empty<string>()
+    };
+
+    private async void HandleValidation()
+    {
+        if (!string.IsNullOrWhiteSpace(userInputModel.Url))
+        {
+            _loading = true;
+            stats = await Http.GetJsonAsync<StatisticsDto>(Config["apiUrl"] + $"?url={userInputModel.Url}");
+            _loading = false;
+            StateHasChanged();
+        }
+    }
+}

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ParserMain": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\Haskis\\Desktop\\test.xml\""
+    }
+  }
+}
